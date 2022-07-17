@@ -1,0 +1,27 @@
+    Projeto: Elaborar... uma curva de carga... se baseando em um exercício de introdução
+ao sistema elétrico.
+    Primeiro passo: Organizar as informações devidamente, primeira parte esta feita a mão,
+afim de poder acessa-las e modifica-las ultilizando pandas.
+    Segundo passo: Com as informações organizadas, um script gerará as informações necessárias
+para que a curva de carga seja gerada.
+    Terceiro passo: Fazer a curva, que apesar de não aparentar ser nada diferente, seria necessário
+agora a biblioteca matplotlib.
+    Quarto passo:
+    O exercício é pensado como uma empresa estudando a viabilidade de passar do Ambiente comercial regulado
+para o Ambiente comercial livre de consumo de energia. Como parte do dimensionamento do sistema,
+é pedido para dimensionar os transformadores, dois, que fornecem energia ao sistema da seguinte forma:
+        -- Transformador 1 -> QL1~QD5
+        -- Transformador 2 -> AQ1~M8
+    Quinto passo:
+    O quinto passo deveria ser, calcular qual seria a diferença entre pagar a energia no ACR e no ACL,
+entretanto, o quinto passo será uma script para modificar o horário em que estes determinados
+equipamentos estão ligados.
+Add.1 -> um script para remover equipamentos e adicionar outros, não alterando apenas o seu horário
+    Sexto passo:
+    Criar um único script com todas as funções anteriormente listadas, exceto possíveis adicionais.
+O sexto passo é possivelmente o último, e não necessariamente terá uma ordem de funcionamento, não
+necessariamente será um script, mas conterá todas as funções feitas até agora. Este sexto passo, seria
+como o arquivo final, pois se eu quiser melhorar algo, ou usar este programa em outros lugares, todas
+as funções estariam no mesmo lugar.
+Chamarei ele então por ser um caso especial de [Merge], a pasta onde todas as variaveis e funções
+estão contidas, e também o diretório onde as melhorias e modificações irão ocorrer
