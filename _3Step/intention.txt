@@ -1,8 +1,0 @@
-    Terceiro passo: Fazer a curva, que apesar de não aparentar ser nada diferente, seria necessário
-agora a biblioteca matplotlib.
-    A curva de carga depende da quantidade de energia elétrica sendo utilizada, dependendo portanto
-do resultado do consumo diário realizado no segundo passo.
-    Utilizando-se de matplotlib, é necessário apenas achar as configurações adequadas para plotar um
-gráfico.
-    O gráfico faz o seu trabalho, entretanto ele n ficou muito bom, então vou tentar usar numpy para
-suavizar a curva.
