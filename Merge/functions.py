@@ -25,7 +25,10 @@ class CurvaDCarga:
                                           sheet_name='Planilha2').sort_values(by='Equipamento').reset_index(drop=True)
         self.motores = pd.read_excel('../Dados Modificados/Tabela de dados de horarios e potencias.xlsx',
                                      sheet_name='Planilha3').sort_values(by='Equipamento').reset_index(drop=True)
+
         self.sep = self.find_t1xt2()  # [e] equipamentos / [m] motores / [t1] transf 1 / [t2] transf [2]
+        self.equipamentos.index = self.sep['e']
+        self.motores.index = self.sep['m']
         self.cv2kw = .735499
         self.cd, self.t1, self.t2, self.cd_max, self.t1_max, self.t2_max = [None, ] * 6
         self.calc_potencias()
@@ -71,8 +74,6 @@ class CurvaDCarga:
         # para os transformadores (S)
         transformador_1 = self.mult_row_by(potencia_s_diaria[:]).loc[self.sep['t1']]
         transformador_2 = self.mult_row_by(potencia_s_diaria[:]).loc[self.sep['t2']]
-        print(transformador_1.to_string())
-        print(transformador_2.to_string())
 
 
 
@@ -81,8 +82,6 @@ class CurvaDCarga:
         self.t1 = transformador_1[:].iloc[:, 1:].sum()
         self.t2 = transformador_2[:].iloc[:, 1:].sum()
 
-        print(self.t1)
-        print(self.t2)
 
         self.cd_max = self.cd.max()
         self.t1_max = self.t1.max()
@@ -120,18 +119,21 @@ class CurvaDCarga:
         if mode.lower() == 'rd':
             choice = self.ask_device()
             time_on = self.use_data(self.random_data())
-            print(time_on)
+            print(f'Changing {choice} timetable to\n{time_on}')
             self.change_timing(choice, time_on)
         elif mode.lower() == 'nd':
             if data:
                 choice = self.ask_device()
                 time_on = self.use_data(data)
+                print(f'Changing {choice} timetable to\n{time_on}')
                 self.change_timing(choice, time_on)
             else:
                 print('Nenhum dado especificado em *data*')
         elif mode.lower() == 'wr':
             choice = self.ask_device()
-            self.change_timing(choice, self.ask_horario())
+            time_on = self.ask_horario()
+            print(f'Changing {choice} timetable to\n{time_on}')
+            self.change_timing(choice, time_on)
         else:
             print('Modo não reconhecido...')
             return
@@ -175,7 +177,6 @@ class CurvaDCarga:
             else:
                 c = f'{c}:00'
 
-            print(f'{c} - - - {ind} - - - {data}')
             d[c] = data[ind]
 
         return d
@@ -221,13 +222,6 @@ class CurvaDCarga:
         newtime['Equipamento'] = choice
         line = pd.DataFrame(newtime, index=line.index)
         self.horario.loc[line.index] = line
-        self.bef()
-
-    def bef(self):
-        print(f'\033[33m{self.horario}\033[m')
-
-    def aft(self):
-        print(f'\033[34m{self.horario}\033[m')
 
     def add_device(self, mode='wr',nm=None, desc=None, alt=None, n=None, fp=None, hr=None):
         if mode == 'wr':
@@ -302,10 +296,19 @@ class CurvaDCarga:
             if not device:
                 return print('Nenhum dado removido')
         verify = self.horario.loc[:, 'Equipamento'] == device
-        id_tr = str(self.horario.loc[verify].index).replace('[', '´´').replace(']', '´´').split('´´')
-        id_tr = int(id_tr[1])
+        id_tr = self.horario.loc[verify]
+        if id_tr.empty:
+            return print(f'{device} não foi encontrado')
+        id_tr = id_tr.index[0]
         self.horario.drop(index=id_tr, inplace=True)
         self.horario.reset_index(inplace=True, drop=True)
+
+        if id_tr in self.sep['e']:
+            print(self.equipamentos)
+            self.equipamentos.drop(index=id_tr, inplace=True)
+        else:
+            self.motores.drop(index=id_tr, inplace=True)
+        self.sep = self.find_t1xt2()
         self.calc_potencias()
 
     def find_t1xt2(self):
@@ -319,14 +322,8 @@ class CurvaDCarga:
         return {'m': m_id, 'e': e_id, 't1': t1_id, 't2': t2_id}
 
 
-rd = {'00:00': 0, '01:00': 0, '02:00': 0, '03:00': 1, '04:00': 1, '05:00': 0, '06:00': 0, '07:00': 0, '08:00': 1,
-      '09:00': 1, '10:00': 1, '11:00': 0, '12:00': 0, '13:00': 0, '14:00': 0, '15:00': 1, '16:00': 0, '17:00': 0,
-      '18:00': 1, '19:00': 1, '20:00': 0, '21:00': 0, '22:00': 1, '23:00': 0}
 
-nd = [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
 
 cdg = CurvaDCarga()
-print(f'{cdg.cd_max}\n{cdg.t1_max}\n{cdg.t2_max}\n\n')
-# cdg.add_device(mode='nd',nm='M9',desc='Motor 9', alt=88, n=.95, fp=.85, hr=rd)
-# cdg.add_device(mode='nd',nm='Aq12',desc='Sistema de aquecimento 12', alt=6, n=.95, fp=.85, hr=rd)
+# print(f'{cdg.cd_max}\n{cdg.t1_max}\n{cdg.t2_max}\n\n')
 
