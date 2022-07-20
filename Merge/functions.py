@@ -75,13 +75,10 @@ class CurvaDCarga:
         transformador_1 = self.mult_row_by(potencia_s_diaria[:]).loc[self.sep['t1']]
         transformador_2 = self.mult_row_by(potencia_s_diaria[:]).loc[self.sep['t2']]
 
-
-
         # usado para o plot
         self.cd = consumo_diario[:].iloc[:, 1:].sum()
         self.t1 = transformador_1[:].iloc[:, 1:].sum()
         self.t2 = transformador_2[:].iloc[:, 1:].sum()
-
 
         self.cd_max = self.cd.max()
         self.t1_max = self.t1.max()
