@@ -8,3 +8,4 @@ rd = {'00:00': 0, '01:00': 0, '02:00': 0, '03:00': 1, '04:00': 1, '05:00': 0, '0
 cdg.add_device(mode='nd',nm='M9',desc='Motor 9', alt=88, n=.95, fp=.85, hr=rd)
 cdg.add_device(mode='nd',nm='Aq12',desc='Sistema de aquecimento 12', alt=6, n=.95, fp=.85, hr=rd)
 # cdg.add_device(mode='wr')  # dados são fornecidos pelo prompt
+cdg.show_vars()
