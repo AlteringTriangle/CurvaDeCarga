@@ -7,7 +7,6 @@ Objetivos
     --- adaptar melhor as funções para se adequar aos scripts
 """
 
-
 class CurvaDCarga:
     def __init__(self):
         self.horario = pd.read_excel('../Dados Modificados/Tabela de dados de horarios e potencias.xlsx',
